@@ -278,6 +278,8 @@ FROM base AS dev
 # copy kimai develop source
 COPY --from=git-dev --chown=www-data:www-data /opt/kimai /opt/kimai
 COPY assets /assets
+COPY config/packages/doctrine.yaml /opt/kimai/config/packages/doctrine.yaml
+COPY config/packages/local.yaml /opt/kimai/config/packages/local.yaml
 # do the composer deps installation
 RUN echo \$PATH
 RUN \
@@ -301,6 +303,8 @@ FROM base AS prod
 # copy kimai production source
 COPY --from=git-prod --chown=www-data:www-data /opt/kimai /opt/kimai
 COPY assets /assets
+COPY config/packages/doctrine.yaml /opt/kimai/config/packages/doctrine.yaml
+COPY config/packages/local.yaml /opt/kimai/config/packages/local.yaml
 # do the composer deps installation
 RUN \
     export COMPOSER_HOME=/composer && \

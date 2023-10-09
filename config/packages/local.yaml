@@ -1,0 +1,62 @@
+kimai:
+    saml:
+        provider: keycloak
+        activate: true
+        title: Login with Google
+        mapping:
+            - { saml: $Email, kimai: email }
+            - { saml: $FirstName $LastName, kimai: alias }
+        roles:
+            resetOnLogin: true
+            attribute: Roles
+            mapping:
+                - { saml: Admins, kimai: ROLE_ADMIN }
+                - { saml: Management, kimai: ROLE_TEAMLEAD }
+        connection:
+            # You SAML provider, here an example for Keycloak
+            idp:
+                entityId: 'https://auth.kalvium.community/auth/realms/kalvium'
+                singleSignOnService:
+                    url: 'https://auth.kalvium.community/auth/realms/kalvium/protocol/saml'
+                    binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
+                #    url: 'https://127.0.0.1:8010/logout' binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
+                x509cert: 'MIICnTCCAYUCBgGCSP15ujANBgkqhkiG9w0BAQsFADASMRAwDgYDVQQDDAdrYWx2aXVtMB4XDTIyMDcyOTA4MDQwN1oXDTMyMDcyOTA4MDU0N1owEjEQMA4GA1UEAwwHa2Fsdml1bTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKiw5NeR9qfcyO7sIuIcNg9jnKGHW/kfdedP08iMbfE2MHnKswwnqXHrg/VPg2SwphbO2VS21e4rF0hn/qun90VJFWfXLxaHlQhpzcy69GXoJgJMwfgOHuWJTt0twGzV6iHmzvFmB3ye4kd5jqLP4FYWB4fXDcLGBklqKwAyf3JBwj/YsoIeAd0D7/uTa0y0Le7jpemZ4tgcSB84nE8UR9g6zPU5wu/tb7OHyd3pSjz71/83u5Yb8wi3IeA+96V+FR1YqIugaxQ3BHXSYRjLZ7bWdVSk6jGBZNdBPHVHuS+bXxvdYhMrYFAY1Gob+aQJ2CpXzH3cBYtL5ITNOngsciUCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAnRspJS9Iiqis3H214HYZE2UJ0KqtesJvQhR8zF+dioDlpAslfvoQ08upqIQONt3GtjmiLnBDR0EtlrKP0XwsnaxtJNPI8NXww0zNTAYM4lGj+28OeaY0jpXwE5RkcCW/oYK4M3Ab+g2ZnAGfB4yZZacYK4tg8EF69PhdIk5clJ4rFjwF0bfROOPJmYiJtMfJtWfQDrxHL/hFN/iq8hcrtuPrHSFtoX3r50ul/wf0CjBkH48NUwX+Mc2Jwc/WDG3/cpEj3QFiBWGp+ddLdCr5+Xeru6E6zsUoqcQPHRhzR4za1npqZ2eZ7Bj1HQjjtFOW0oxXayc0608eZQ6oRDP/gQ=='
+            # Your Kimai instance, replace https://127.0.0.1:8010 with your base URL
+            sp:
+                entityId: 'kimai2'
+                assertionConsumerService:
+                    url: 'https://worklog.kalvium.community/auth/saml/acs'
+                    binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
+                singleLogoutService:
+                    url: 'https://worklog.kalvium.community/auth/saml/logout'
+                    binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
+                #privateKey: ''
+            # only set baseurl, if auto-detection doesn't work
+            baseurl: 'https://worklog.kalvium.community/auth/saml/'
+            strict: true
+            debug: true
+            security:
+                nameIdEncrypted: false
+                authnRequestsSigned: false
+                logoutRequestSigned: false
+                logoutResponseSigned: false
+                wantMessagesSigned: false
+                wantAssertionsSigned: false
+                wantNameIdEncrypted: false
+                requestedAuthnContext: true
+                signMetadata: false
+                wantXMLValidation: true
+                signatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256'
+                digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256'
+            contactPerson:
+                technical:
+                    givenName: 'Kimai Admin'
+                    emailAddress: 'cerlin@kalvium.com'
+                support:
+                    givenName: 'Kimai Support'
+                    emailAddress: 'cerlin@kalvium.com'
+            organization:
+                en:
+                    name: 'Kimai'
+                    displayname: 'Kimai'
+                    url: 'https://www.kimai.org'
