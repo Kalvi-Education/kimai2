@@ -1,17 +1,16 @@
 <?php
-$DB_HOST = $argv[1];
+$DB_UNIX = $argv[1];
 $DB_BASE = $argv[2];
-$DB_PORT = $argv[3];
-$DB_USER = $argv[4];
-$DB_PASS = $argv[5];
+$DB_USER = $argv[3];
+$DB_PASS = $argv[4];
 
 echo "Testing DB:";
 echo "*";
-echo "* new \PDO(mysql:host=$DB_HOST;dbname=$DB_BASE;port=$DB_PORT, $DB_USER, $DB_PASS, [ \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION ]);";
+echo "* new \PDO(mysql:unix_socket=$DB_UNIX;dbname=$DB_BASE, $DB_USER, $DB_PASS, [ \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION ]);";
 echo "*";
 
 try {
-    $pdo = new \PDO("mysql:host=$DB_HOST;dbname=$DB_BASE;port=$DB_PORT", "$DB_USER", "$DB_PASS", [
+    $pdo = new \PDO("mysql:unix_socket=$DB_UNIX;dbname=$DB_BASE", "$DB_USER", "$DB_PASS", [
         \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
     ]);
 } catch(\Exception $ex) {

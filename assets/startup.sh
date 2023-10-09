@@ -10,15 +10,15 @@ function config() {
     memory_limit=256M
   fi
 
-
   # Parse sql connection data
   if [ ! -z "$DATABASE_URL" ]; then
     DB_TYPE=$(awk -F '[/:@]' '{print $1}' <<< "$DATABASE_URL")
     DB_USER=$(awk -F '[/:@]' '{print $4}' <<< "$DATABASE_URL")
     DB_PASS=$(awk -F '[/:@]' '{print $5}' <<< "$DATABASE_URL")
-    DB_HOST=$(awk -F '[/:@]' '{print $6}' <<< "$DATABASE_URL")
-    DB_PORT=$(awk -F '[/:@]' '{print $7}' <<< "$DATABASE_URL")
-    DB_BASE=$(awk -F '[/?]' '{print $4}' <<< "$DATABASE_URL")
+    DB_UNIX='/'$(awk -F '[/:@]' '{print $7}' <<< "$DATABASE_URL")'/'$(awk -F '[/:@]' '{print $8}' <<< "$DATABASE_URL")':'$(awk -F '[/:@]' '{print $9}' <<< "$DATABASE_URL")':'$(awk -F '[/:@]' '{print $10}' <<< "$DATABASE_URL")
+    DB_BASE=$(awk -F '[/:@]' '{print $11}' <<< "$DATABASE_URL")
+
+    echo "DATABASE_URL=${DATABASE_URL} DB_TYPE=${DB_TYPE} DB_USER=${DB_USER} DB_PASS=${DB_PASS} DB_UNIX=${DB_UNIX} DB_BASE=${DB_BASE}"
   else
     DB_TYPE=${DB_TYPE:mysql}
     if [ "$DB_TYPE" == "mysql" ]; then
@@ -35,7 +35,7 @@ function config() {
   fi
 
   echo "Wait for MySQL DB connection ..."
-  until php /dbtest.php $DB_HOST $DB_BASE $DB_PORT $DB_USER $DB_PASS; do
+  until php /dbtest.php $DB_UNIX $DB_BASE $DB_USER $DB_PASS; do
     echo Checking DB: $?
     sleep 3
   done
